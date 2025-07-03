@@ -1,0 +1,416 @@
+:root {
+    --primary-color: #2c3e50;
+    --secondary-color: #4ca1af;
+    --text-color: #333;
+    --light-bg: #f8f9fa;
+    --success-color: #28a745;
+    --warning-color: #ffc107;
+    --danger-color: #dc3545;
+}
+
+/* Structure de base */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f5f5f5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 20px;
+    color: var(--text-color);
+}
+
+.badge-container {
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+/* Carte badge */
+.badge-card {
+    background: linear-gradient(135deg, #ffffff 0%, var(--light-bg) 100%);
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+    position: relative;
+    border: 1px solid #e0e0e0;
+    transition: transform 0.3s ease;
+}
+
+.badge-card:hover {
+    transform: translateY(-5px);
+}
+
+/* En-tête */
+.badge-header {
+    background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+    color: white;
+    padding: 20px;
+    text-align: center;
+    position: relative;
+}
+
+.company-name {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 5px;
+    letter-spacing: 1px;
+}
+
+.company-slogan {
+    font-size: 12px;
+    opacity: 0.8;
+    font-style: italic;
+}
+
+/* Photo employé */
+.employee-photo-container {
+    margin: 20px auto;
+    width: 120px;
+    height: 120px;
+}
+
+.employee-photo {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 4px solid white;
+    object-fit: cover;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease;
+}
+
+.employee-photo:hover {
+    transform: scale(1.05);
+}
+
+/* Informations employé */
+.employee-info {
+    padding: 20px;
+    text-align: center;
+}
+
+.employee-info h2 {
+    font-size: 22px;
+    margin-bottom: 5px;
+    color: var(--primary-color);
+}
+
+.position {
+    color: var(--secondary-color);
+    font-weight: 500;
+    margin-bottom: 15px;
+}
+
+/* Grille de détails */
+.details-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin: 20px 0;
+}
+
+.detail-item {
+    background-color: var(--light-bg);
+    padding: 10px;
+    border-radius: 8px;
+    text-align: center;
+    transition: all 0.2s ease;
+}
+
+.detail-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.detail-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    color: #6c757d;
+    margin-bottom: 3px;
+    letter-spacing: 0.5px;
+}
+
+.detail-value {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+/* Section QR Code */
+.qr-section {
+    background-color: var(--light-bg);
+    padding: 20px;
+    text-align: center;
+    border-top: 1px dashed #dee2e6;
+}
+
+.qr-container {
+    display: inline-block;
+    padding: 10px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    margin-bottom: 15px;
+}
+
+/* Badge statut */
+.status-badge {
+    display: inline-block;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    margin: 10px 0;
+}
+
+.status-badge.arrivee {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.status-badge.depart {
+    background-color: #cce5ff;
+    color: #004085;
+}
+
+/* Boutons d'action */
+.action-buttons {
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.btn-print, .btn-dashboard {
+    padding: 8px 15px;
+    border-radius: 5px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: all 0.2s;
+}
+
+.btn-print {
+    background-color: transparent;
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+}
+
+.btn-dashboard {
+    background-color: var(--secondary-color);
+    color: white;
+    text-decoration: none;
+}
+
+/* Alerte sécurité */
+.security-alert {
+    position: fixed;
+    bottom: -100px;
+    right: 20px;
+    background-color: var(--warning-color);
+    color: #000;
+    padding: 10px 15px;
+    border-radius: 5px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+    transition: bottom 0.3s ease;
+    max-width: 300px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.security-alert.show {
+    bottom: 20px;
+}
+
+/* Responsive */
+@media (max-width: 500px) {
+    .badge-card {
+        width: 100%;
+    }
+    
+    .details-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media print {
+    body {
+        background: none;
+        padding: 0;
+    }
+    
+    .badge-card {
+        box-shadow: none;
+        border: none;
+    }
+    
+    .action-buttons {
+        display: none;
+    }
+}
+body {
+    background: #f6f8fb;
+}
+.header {
+    background: #24314d;
+    color: #fff;
+    padding: 16px 0;
+}
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.logo {
+    font-size: 1.7rem;
+    font-weight: bold;
+    letter-spacing: 2px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.user-photo {
+    height: 40px; width: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+.badge-container {
+    display: flex; justify-content: center; align-items: center;
+    min-height: 80vh;
+}
+.badge-card {
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 6px 24px #0001;
+    padding: 28px 30px;
+    max-width: 420px;
+    width: 100%;
+}
+.badge-header {
+    text-align: center;
+}
+.employee-id {
+    font-size: 1.1rem;
+    color: #1e396c;
+    font-weight: bold;
+}
+.photo-container {
+    margin: 10px 0 10px 0;
+}
+.employee-photo {
+    height: 80px; width: 80px;
+    border-radius: 50%;
+    border: 3px solid #365eaa;
+    object-fit: cover;
+    background: #f8f9fa;
+}
+.employee-name {
+    font-size: 1.4rem;
+    margin: 10px 0 2px 0;
+}
+.employee-position {
+    font-size: 1.1rem;
+    color: #7a889a;
+    margin-bottom: 10px;
+}
+.info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin: 12px 0 16px 0;
+}
+.info-card {
+    background: #f6f8fb;
+    border-radius: 9px;
+    padding: 7px 12px;
+}
+.info-label {
+    font-size: 0.85rem;
+    color: #888da8;
+}
+.info-value {
+    font-weight: bold;
+    font-size: 1rem;
+    color: #233151;
+}
+.qr-section {
+    margin: 18px 0;
+    text-align: center;
+}
+.qr-title {
+    font-weight: 500;
+    font-size: 1.1rem;
+    margin-bottom: 7px;
+}
+.qr-container {
+    display: flex;
+    justify-content: center;
+    margin: 8px 0 12px 0;
+}
+.checkin-status {
+    margin: 10px 0 7px 0;
+    font-weight: 600;
+    font-size: 1rem;
+}
+.status-arrivee { color: #37b24d; }
+.status-depart { color: #f08c00; }
+.expiration-info, .countdown {
+    font-size: 0.95rem;
+    color: #2787c7;
+    margin-bottom: 5px;
+}
+.expiration-danger { color: #dc3545; font-weight: bold; }
+.expiration-warning { color: #f08c00; font-weight: bold; }
+.action-buttons {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin: 18px 0 2px 0;
+    justify-content: center;
+}
+.btn-badge {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.97rem;
+    border-radius: 10px;
+    padding: 5px 15px;
+}
+.footer {
+    background: #24314d;
+    color: #fff;
+    text-align: center;
+    font-size: 0.98rem;
+    padding: 9px 0 3px 0;
+    margin-top: 20px;
+}
+.security-alert {
+    position: fixed;
+    right: 18px;
+    bottom: 18px;
+    background: #fff;
+    border: 2px solid #1e396c;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 12px 21px;
+    box-shadow: 0 6px 32px #0002;
+    z-index: 999;
+    animation: fadeInUp 0.6s;
+}
+.security-icon {
+    font-size: 2.2rem;
+    color: #1e396c;
+}
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px);}
+    to { opacity: 1; transform: translateY(0);}
+}

@@ -1,0 +1,301 @@
+<?php
+class PointageService {
+    private $pdo;
+    private $secretKey;
+    private const TOKEN_EXPIRATION = 7200; // 2 heures en secondes
+    private const HEURE_LIMITE = '09:00:00';
+    private const PAUSE_APRES = 14400; // 4 heures en secondes
+    private const DUREE_PAUSE = 3600; // 1 heure en secondes
+
+    public function __construct(PDO $pdo, string $secretKey = SECRET_KEY) {
+        $this->pdo = $pdo;
+        $this->secretKey = $secretKey;
+    }
+
+    /**
+     * Traite un pointage complet (arrivée ou départ)
+     * @param string $token Le token QR code à valider
+     * @return array Résultat du pointage
+     * @throws BadRequestException|UnauthorizedException|Exception
+     */
+    public function traiterPointage(string $token): array {
+        $this->validerTokenStructure($token);
+        
+        list($employe_id, $timestamp, $signature) = explode('|', $token);
+        $this->verifierSignature($employe_id, $timestamp, $signature);
+        $this->verifierExpiration($timestamp);
+        
+        $tokenData = $this->verifierTokenEnBase($token, $employe_id);
+        return $this->enregistrerPointage($employe_id, $tokenData['id']);
+    }
+
+    /**
+     * Valide la structure du token
+     * @throws BadRequestException
+     */
+    private function validerTokenStructure(string $token): void {
+        if (count(explode('|', $token)) !== 3) {
+            throw new BadRequestException('Format de token invalide');
+        }
+    }
+
+    /**
+     * Vérifie la signature HMAC du token
+     * @throws UnauthorizedException
+     */
+    private function verifierSignature(string $employe_id, string $timestamp, string $signature): void {
+        $expected = hash_hmac('sha256', "$employe_id|$timestamp", $this->secretKey);
+        if (!hash_equals($expected, $signature)) {
+            throw new UnauthorizedException('Signature invalide');
+        }
+    }
+
+    /**
+     * Vérifie que le token n'a pas expiré
+     * @throws UnauthorizedException
+     */
+    private function verifierExpiration(string $timestamp): void {
+        if (time() - (int)$timestamp > self::TOKEN_EXPIRATION) {
+            throw new UnauthorizedException('Token expiré');
+        }
+    }
+
+    /**
+     * Vérifie le token dans la base de données
+     * @throws UnauthorizedException
+     */
+    private function verifierTokenEnBase(string $token, string $employe_id): array {
+        $token_hash = hash('sha256', $token);
+        $stmt = $this->pdo->prepare(
+            "SELECT * FROM badge_tokens 
+            WHERE token_hash = ? 
+            AND employe_id = ? 
+            AND expires_at > NOW()"
+        );
+        $stmt->execute([$token_hash, $employe_id]);
+        
+        if (!$record = $stmt->fetch()) {
+            throw new UnauthorizedException('Token invalide ou expiré');
+        }
+        
+        if (!empty($record['used_at'])) {
+            throw new UnauthorizedException('Token déjà utilisé');
+        }
+        
+        return $record;
+    }
+
+    /**
+     * Enregistre un pointage (arrivée ou départ)
+     * @throws Exception
+     */
+    private function enregistrerPointage(int $employe_id, int $token_id): array {
+        $this->pdo->beginTransaction();
+        
+        try {
+            $this->marquerTokenUtilise($token_id);
+            $type = $this->determinerTypePointage($employe_id);
+            
+            if ($type === 'arrivee') {
+                $result = $this->enregistrerArrivee($employe_id);
+            } else {
+                $result = $this->enregistrerDepart($employe_id);
+            }
+            
+            $this->pdo->commit();
+            return $result;
+            
+        } catch (Exception $e) {
+            $this->pdo->rollBack();
+            throw $e;
+        }
+    }
+
+    /**
+     * Détermine le type de pointage à effectuer
+     */
+    private function determinerTypePointage(int $employe_id): string {
+        $current_date = date('Y-m-d');
+        $stmt = $this->pdo->prepare(
+            "SELECT type FROM pointages 
+            WHERE employe_id = ? 
+            AND DATE(date_heure) = ? 
+            ORDER BY date_heure DESC 
+            LIMIT 1"
+        );
+        $stmt->execute([$employe_id, $current_date]);
+        $last = $stmt->fetch();
+
+        return (!$last || $last['type'] === 'depart') ? 'arrivee' : 'depart';
+    }
+
+    /**
+     * Enregistre une arrivée
+     */
+    private function enregistrerArrivee(int $employe_id): array {
+        $current_time = date('Y-m-d H:i:s');
+        $retard = $this->verifierRetard($current_time);
+
+        $stmt = $this->pdo->prepare(
+            "INSERT INTO pointages 
+            (date_heure, employe_id, type, retard_justifie, retard_cause) 
+            VALUES (?, ?, 'arrivee', ?, ?)"
+        );
+        $stmt->execute([
+            $current_time,
+            $employe_id,
+            $retard ? 'non' : null,
+            $retard ? 'Arrivée après ' . self::HEURE_LIMITE : null
+        ]);
+
+        return [
+            'status' => 'success',
+            'message' => 'Arrivée enregistrée',
+            'en_retard' => $retard,
+            'timestamp' => $current_time
+        ];
+    }
+
+    /**
+     * Enregistre un départ
+     * @throws Exception
+     */
+    private function enregistrerDepart(int $employe_id): array {
+        $current_time = date('Y-m-d H:i:s');
+        $derniere_arrivee = $this->getDerniereArrivee($employe_id);
+
+        $duree_travail = $this->calculerDureeTravail(
+            $derniere_arrivee['date_heure'],
+            $current_time
+        );
+
+        $this->enregistrerDepartEnBase($employe_id, $current_time, $duree_travail['total']);
+        $new_token = $this->genererNouveauToken($employe_id);
+
+        return [
+            'status' => 'success',
+            'message' => 'Départ enregistré',
+            'temps_total' => $duree_travail['total'],
+            'pause' => $duree_travail['pause'],
+            'new_token' => $new_token,
+            'timestamp' => $current_time
+        ];
+    }
+
+    /**
+     * Vérifie si l'arrivée est en retard
+     */
+    private function verifierRetard(string $current_time): bool {
+        $limite = date('Y-m-d') . ' ' . self::HEURE_LIMITE;
+        return strtotime($current_time) > strtotime($limite);
+    }
+
+    /**
+     * Récupère la dernière arrivée de l'employé
+     * @throws Exception
+     */
+    private function getDerniereArrivee(int $employe_id): array {
+        $current_date = date('Y-m-d');
+        $stmt = $this->pdo->prepare(
+            "SELECT date_heure FROM pointages 
+            WHERE employe_id = ? 
+            AND DATE(date_heure) = ? 
+            AND type = 'arrivee' 
+            ORDER BY date_heure DESC 
+            LIMIT 1"
+        );
+        $stmt->execute([$employe_id, $current_date]);
+        
+        if (!$arrivee = $stmt->fetch()) {
+            throw new Exception('Départ non autorisé sans arrivée préalable');
+        }
+        
+        return $arrivee;
+    }
+
+    /**
+     * Calcule la durée de travail avec pause
+     */
+    private function calculerDureeTravail(string $debut, string $fin): array {
+        $start = new DateTime($debut);
+        $end = new DateTime($fin);
+        
+        if ($end < $start) {
+            throw new Exception('Heure de départ antérieure à l\'arrivée');
+        }
+
+        $diff = $start->diff($end);
+        $total_seconds = ($diff->h * 3600) + ($diff->i * 60) + $diff->s;
+
+        $pause = $total_seconds > self::PAUSE_APRES ? self::DUREE_PAUSE : 0;
+        $temps_travail = max(0, $total_seconds - $pause);
+
+        return [
+            'total' => gmdate('H:i:s', $temps_travail),
+            'pause' => gmdate('H:i:s', $pause)
+        ];
+    }
+
+    /**
+     * Enregistre le départ en base
+     */
+    private function enregistrerDepartEnBase(int $employe_id, string $heure, string $duree): void {
+        $stmt = $this->pdo->prepare(
+            "INSERT INTO pointages 
+            (date_heure, employe_id, type, temps_total) 
+            VALUES (?, ?, 'depart', ?)"
+        );
+        $stmt->execute([$heure, $employe_id, $duree]);
+    }
+
+    /**
+     * Génère un nouveau token pour l'employé
+     */
+    private function genererNouveauToken(int $employe_id): string {
+        $timestamp = time();
+        $signature = hash_hmac('sha256', "$employe_id|$timestamp", $this->secretKey);
+        $token = "$employe_id|$timestamp|$signature";
+        $expires = date('Y-m-d H:i:s', $timestamp + self::TOKEN_EXPIRATION);
+
+        $this->enregistrerTokenEnBase($employe_id, $token, $expires);
+        $this->invaliderAnciensTokens($employe_id, $token);
+
+        return $token;
+    }
+
+    /**
+     * Enregistre le nouveau token en base
+     */
+    private function enregistrerTokenEnBase(int $employe_id, string $token, string $expires): void {
+        $stmt = $this->pdo->prepare(
+            "INSERT INTO badge_tokens 
+            (employe_id, token_hash, created_at, expires_at) 
+            VALUES (?, ?, NOW(), ?)"
+        );
+        $stmt->execute([$employe_id, hash('sha256', $token), $expires]);
+    }
+
+    /**
+     * Marque les anciens tokens comme expirés
+     */
+    private function invaliderAnciensTokens(int $employe_id, string $nouveau_token): void {
+        $this->pdo->prepare(
+            "UPDATE badge_tokens 
+            SET expires_at = NOW() 
+            WHERE employe_id = ? 
+            AND expires_at > NOW() 
+            AND token_hash != ?"
+        )->execute([$employe_id, hash('sha256', $nouveau_token)]);
+    }
+
+    /**
+     * Marque un token comme utilisé
+     */
+    private function marquerTokenUtilise(int $token_id): void {
+        $this->pdo->prepare("UPDATE badge_tokens SET used_at = NOW() WHERE id = ?")
+            ->execute([$token_id]);
+    }
+}
+
+class BadRequestException extends Exception {}
+class UnauthorizedException extends Exception {}

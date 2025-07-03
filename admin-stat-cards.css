@@ -1,0 +1,14 @@
+/* Espacement renforcé sous les cartes stats */
+.row.g-3.mb-4, .row.g-4.mb-5 {
+    margin-bottom: 2.5rem !important;
+}
+
+.stat-card .stat-count {
+    margin-bottom: 0.5rem;
+    letter-spacing: 1px;
+}
+
+.stat-card .text-muted {
+    margin-top: 0.5rem;
+    display: block;
+}

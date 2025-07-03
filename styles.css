@@ -1,0 +1,358 @@
+/* Style général */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #f5f5f5 60%, #e3f0ff 100%);
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+/* En-tête du tableau de bord */
+h2.text-center {
+    font-size: 2.5rem;
+    color: color(prophoto-rgb 0.05 0.03 0.1);
+    margin-bottom: 30px;
+    font-weight: 600;
+}
+
+/* Style pour les sections */
+h4 {
+    font-size: 1.75rem;
+    color: #343a40;
+    margin-bottom: 20px;
+}
+
+/* Tableau */
+table.table {
+    background-color: #ffffff;
+    border-radius: 8px;
+    border-collapse: collapse;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+table.table thead {
+    background-color: #007bff;
+    color: #ffffff;
+    font-weight: bold;
+}
+
+table.table tbody tr:nth-child(even) {
+    background-color: #f8f9fa;
+}
+
+table.table tbody tr:hover {
+    background-color: #e2e6ea;
+    transition: background-color 0.3s ease;
+}
+
+table.table td, table.table th {
+    padding: 10px;
+    text-align: center;
+}
+
+/* Bouton Supprimer */
+.btn-danger {
+    background-color: #dc3545;
+    border-color: #dc3545;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.btn-danger:hover {
+    background-color: #c82333;
+    border-color: #bd2130;
+}
+
+/* Formulaire d'ajout d'admin */
+form {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+form .form-label {
+    font-weight: bold;
+    color: #495057;
+}
+
+form .form-control {
+    border-radius: 5px;
+    border: 1px solid #ced4da;
+    box-shadow: none;
+    font-size: 1rem;
+}
+
+form .btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+    font-size: 1.1rem;
+    font-weight: bold;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+form .btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #004085;
+}
+
+/* Responsive Design */
+@media (max-width: 767px) {
+    .container {
+        margin-top: 20px;
+    }
+
+    .row {
+        display: block;
+    }
+
+    .col-md-6 {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+
+    table.table th, table.table td {
+        font-size: 0.9rem;
+    }
+}
+
+/* Conteneur principal */
+.container {
+    max-width: 1000px;
+    margin: 50px auto;
+    padding: 10px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out;
+}
+
+.container:hover {
+    transform: translateY(-5px);
+}
+
+/* Notification */
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-weight: bold;
+    font-family: Arial, sans-serif;
+    z-index: 9999;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    animation: slideFade 0.3s ease-out;
+    color: white;
+}
+
+.notification.success {
+    background-color: #28a745;
+}
+
+.notification.error {
+    background-color: #dc3545;
+}
+
+@keyframes slideFade {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+#qr-video {
+    max-width: 600px;
+    margin: auto;
+    display: block;
+    border: 3px solid #ffc107;
+}
+
+.message-feedback {
+    text-align: center;
+    font-size: 1.2em;
+    margin-top: 20px;
+}
+
+#journal-container {
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    padding: 10px;
+    background-color: #f8f9fa;
+}
+
+/* Titres */
+h2 {
+    text-align: center;
+    font-size: 26px;
+    color: #003366;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+.h2.text-center.mb-3 {
+    text-align: center;
+    font-size: 26px;
+    color: #003366;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+/* QR Code Box */
+#qrcode_arrivee, #qrcode_depart {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 15px auto;
+    padding: 15px;
+    width: 160px;
+    height: 160px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* Champs de saisie */
+input[type="text"], 
+input[type="password"], 
+input[type="email"], 
+input[type="submit"] {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+/* Effet focus */
+input[type="text"]:focus, 
+input[type="password"]:focus, 
+input[type="email"]:focus {
+    border-color: #ff6600;
+    outline: none;
+    box-shadow: 0 0 8px rgba(255, 102, 0, 0.3);
+}
+
+/* Message d'erreur */
+.error-message {
+    color: red;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+/* Bouton principal */
+input[type="submit"] {
+    background: linear-gradient(135deg, #ff6600, #ff4500);
+    color: #fff;
+    border: none;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+input[type="submit"]:hover {
+    background: linear-gradient(135deg, #ff4500, #cc3700);
+    transform: scale(1.05);
+}
+
+/* Liens */
+a {
+    display: block;
+    text-align: center;
+    color: #003366;
+    text-decoration: none;
+    font-weight: bold;
+    margin-top: 10px;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: #ff6600;
+    text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 576px) {
+    .container {
+        margin: 20px auto;
+        padding: 20px;
+    }
+
+    h2 {
+        font-size: 22px;
+    }
+
+    input[type="submit"] {
+        font-size: 16px;
+        padding: 10px;
+    }
+}
+
+.card, .profile-card, .stat-card, .calendar-card, .pointages-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(52,152,219,0.07), 0 1.5px 4px rgba(44,62,80,0.04);
+    margin-bottom: 18px;
+    transition: box-shadow 0.2s;
+}
+.card:hover, .profile-card:hover, .stat-card:hover {
+    box-shadow: 0 8px 32px rgba(52,152,219,0.13), 0 3px 8px rgba(44,62,80,0.08);
+}
+
+.btn, .btn-primary, .btn-outline-primary, .btn-success, .btn-outline-success {
+    border-radius: 8px;
+    font-weight: 600;
+    transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+}
+.btn-primary {
+    background: linear-gradient(90deg, #3498db 60%, #2c3e50 100%);
+    border: none;
+}
+.btn-primary:hover {
+    background: linear-gradient(90deg, #2c3e50 60%, #3498db 100%);
+    color: #fff;
+}
+
+input, select, textarea {
+    border-radius: 6px;
+    border: 1px solid #dbeafe;
+    padding: 0.5rem 0.75rem;
+    font-size: 1rem;
+    background: #f8fafc;
+    transition: border 0.2s;
+}
+input:focus, select:focus, textarea:focus {
+    border-color: #3498db;
+    outline: none;
+}
+
+.header, .navbar {
+    background: linear-gradient(90deg, #3498db 60%, #2c3e50 100%);
+    color: #fff;
+    border-radius: 0 0 16px 16px;
+    box-shadow: 0 2px 8px rgba(44,62,80,0.08);
+}
+
+@media (max-width: 768px) {
+    .card, .profile-card, .stat-card, .calendar-card, .pointages-card {
+        border-radius: 8px;
+        margin-bottom: 12px;
+    }
+    .header, .navbar {
+        border-radius: 0 0 10px 10px;
+    }
+}

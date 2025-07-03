@@ -1,0 +1,527 @@
+/* badge_acces.css */
+:root {
+    --primary: #3498db;
+    --secondary: #2c3e50;
+    --success: #2ecc71;
+    --warning: #f39c12;
+    --danger: #e74c3c;
+    --light: #f8f9fa;
+    --dark: #343a40;
+    --gray: #6c757d;
+    --light-gray: #e9ecef;
+    --border-radius: 8px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    color: var(--dark);
+    line-height: 1.5;
+    padding: 0;
+    font-size: 14px;
+}
+
+.header {
+    background: linear-gradient(135deg, var(--secondary), var(--primary));
+    color: white;
+    padding: 0.8rem 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.header-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    font-size: 1.3rem;
+    font-weight: 600;
+}
+
+.logo i {
+    margin-right: 0.4rem;
+    color: #fff;
+    font-size: 1.1rem;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.9rem;
+}
+
+.user-photo {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    object-fit: cover;
+}
+
+.badge-container {
+    max-width: 700px;
+    width: 95%;
+    margin: 1.5rem auto;
+    padding: 0 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+}
+
+.badge-card {
+    background: white;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    width: 100%;
+    max-width: 500px;
+}
+
+.badge-header {
+    background: linear-gradient(135deg, var(--secondary), var(--primary));
+    color: white;
+    padding: 1.5rem 1rem;
+    text-align: center;
+    position: relative;
+}
+
+.employee-id {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 4px 10px;
+    border-radius: 15px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    backdrop-filter: blur(5px);
+}
+
+.photo-container {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 3px solid white;
+    margin: 0 auto 1rem;
+    overflow: hidden;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12);
+}
+
+.employee-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.employee-name {
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 0.3rem;
+    line-height: 1.2;
+}
+
+.employee-position {
+    font-size: 0.95rem;
+    opacity: 0.9;
+    font-weight: 500;
+}
+
+.badge-content {
+    padding: 1.5rem 1.2rem;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.info-card {
+    background: var(--light);
+    padding: 1rem;
+    border-radius: var(--border-radius);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+    transition: all 0.2s ease;
+}
+
+.info-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.06);
+}
+
+.info-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    color: var(--gray);
+    margin-bottom: 0.3rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.info-value {
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--dark);
+}
+
+.qr-section {
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    text-align: center;
+    margin: 1.5rem 0;
+    border: 1px dashed #cbd5e1;
+}
+
+.qr-title {
+    font-size: 1.2rem;
+    margin-bottom: 1.2rem;
+    color: var(--secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    font-weight: 600;
+}
+
+.qr-container {
+    display: inline-block;
+    padding: 15px;
+    background: white;
+    border-radius: var(--border-radius);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+    margin-bottom: 1rem;
+}
+
+#qrCode {
+    width: 160px;
+    height: 160px;
+}
+
+.checkin-status {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.6rem 1.2rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin: 0.7rem 0;
+    gap: 0.5rem;
+}
+
+.status-arrivee {
+    background: rgba(46, 204, 113, 0.15);
+    color: #27ae60;
+}
+
+.status-depart {
+    background: rgba(52, 152, 219, 0.15);
+    color: #2980b9;
+}
+
+.expiration-info {
+    background: rgba(243, 156, 18, 0.1);
+    border-radius: var(--border-radius);
+    padding: 0.9rem;
+    margin: 1rem 0;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.countdown {
+    background: var(--light);
+    border-radius: var(--border-radius);
+    padding: 0.9rem;
+    margin: 1rem 0;
+    font-size: 1.05rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.expiration-warning {
+    color: var(--warning);
+}
+
+.expiration-danger {
+    color: var(--danger);
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.6; }
+    100% { opacity: 1; }
+}
+
+.action-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.7rem;
+    margin-top: 1.5rem;
+}
+
+.btn-badge {
+    padding: 0.7rem 1.2rem;
+    border-radius: 35px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.2s ease;
+    border: none;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    font-size: 0.85rem;
+    cursor: pointer;
+}
+
+.btn-badge:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.btn-primary {
+    background: var(--primary);
+    color: white;
+}
+
+.btn-secondary {
+    background: var(--secondary);
+    color: white;
+}
+
+.btn-info {
+    background: #10b981;
+    color: white;
+}
+
+.btn-danger {
+    background: var(--danger);
+    color: white;
+}
+
+.footer {
+    text-align: center;
+    padding: 1rem;
+    color: var(--gray);
+    font-size: 0.8rem;
+    margin-top: auto;
+    background: white;
+    border-top: 1px solid var(--light-gray);
+}
+
+.footer p {
+    margin-bottom: 0.2rem;
+}
+
+.security-alert {
+    position: fixed;
+    bottom: 12px;
+    right: 12px;
+    max-width: 280px;
+    padding: 0.8rem;
+    background: white;
+    border-radius: var(--border-radius);
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    animation: slideIn 0.4s ease-out;
+    border-left: 3px solid var(--warning);
+}
+
+@keyframes slideIn {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+.security-icon {
+    font-size: 1.4rem;
+    color: var(--warning);
+}
+
+.security-alert div {
+    flex: 1;
+}
+
+.security-alert strong {
+    display: block;
+    margin-bottom: 0.2rem;
+    font-size: 0.85rem;
+}
+
+.security-alert p {
+    font-size: 0.78rem;
+    color: var(--gray);
+}
+
+@media (max-width: 768px) {
+    .header-container {
+        padding: 0.7rem 1.2rem;
+    }
+    
+    .employee-name {
+        font-size: 1.3rem;
+    }
+    
+    .employee-position {
+        font-size: 0.9rem;
+    }
+    
+    .info-grid {
+        grid-template-columns: 1fr;
+        gap: 0.9rem;
+    }
+    
+    .qr-section {
+        padding: 1.2rem;
+        margin: 1.2rem 0;
+    }
+    
+    .qr-title {
+        font-size: 1.1rem;
+        margin-bottom: 1rem;
+    }
+    
+    #qrCode {
+        width: 140px;
+        height: 140px;
+    }
+    
+    .checkin-status {
+        font-size: 0.85rem;
+        padding: 0.5rem 1rem;
+    }
+    
+    .expiration-info {
+        font-size: 0.85rem;
+    }
+    
+    .countdown {
+        font-size: 1rem;
+        padding: 0.8rem;
+    }
+    
+    .action-buttons {
+        gap: 0.6rem;
+        margin-top: 1.2rem;
+    }
+    
+    .btn-badge {
+        padding: 0.6rem 1rem;
+        font-size: 0.82rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .badge-header {
+        padding: 1.2rem 0.8rem;
+    }
+    
+    .photo-container {
+        width: 90px;
+        height: 90px;
+        margin-bottom: 0.8rem;
+    }
+    
+    .employee-name {
+        font-size: 1.2rem;
+    }
+    
+    .employee-position {
+        font-size: 0.85rem;
+    }
+    
+    .qr-section {
+        padding: 1rem;
+    }
+    
+    .qr-container {
+        padding: 12px;
+    }
+    
+    #qrCode {
+        width: 130px;
+        height: 130px;
+    }
+    
+    .countdown {
+        font-size: 0.95rem;
+        padding: 0.7rem;
+    }
+    
+    .action-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .btn-badge {
+        width: 100%;
+        max-width: 240px;
+        justify-content: center;
+    }
+    
+    .footer {
+        padding: 0.8rem;
+        font-size: 0.75rem;
+    }
+    
+    .security-alert {
+        max-width: 90%;
+        right: 5%;
+        left: 5%;
+        bottom: 8px;
+    }
+}
+
+@media (max-width: 360px) {
+    .employee-name {
+        font-size: 1.1rem;
+    }
+    
+    .qr-title {
+        font-size: 1rem;
+    }
+    
+    .info-card {
+        padding: 0.8rem;
+    }
+    
+    #qrCode {
+        width: 120px;
+        height: 120px;
+    }
+    
+    .countdown {
+        font-size: 0.9rem;
+    }
+}

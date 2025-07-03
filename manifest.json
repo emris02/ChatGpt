@@ -1,0 +1,21 @@
+{
+  "name": "Registre Employé",
+  "short_name": "Registre",
+  "start_url": "/index.php",
+  "display": "standalone",
+  "background_color": "#f5f5f5",
+  "theme_color": "#3498db",
+  "description": "Gestion des badges et pointages employés.",
+  "icons": [
+    {
+      "src": "assets/xpertpro.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "assets/xpertpro.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+} 
